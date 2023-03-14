@@ -1,2 +1,5 @@
-# Basic command for example file
-print("Hello there!")
+import pandas as pd
+import time
+
+time.sleep(3)
+print("completed")
