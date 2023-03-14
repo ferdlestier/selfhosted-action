@@ -23,13 +23,6 @@ jobs:
           #fetch-depth: '0'
           token: ${{ secrets.PACKAGE_TOKEN }}
           
-      - name: Check for new updates
-        id: updates
-        run: |
-          sudo apt-get update
-          sudo apt-get upgrade -y
-          sudo apt-get install git -y
-          
       - name: Check for new commits in last 15 mins
         id: gitlog
         run: |
