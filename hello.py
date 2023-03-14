@@ -1,2 +1,2 @@
-# Basic command for example file - testing commit
+# Basic command for example file
 print("Hello there!")
