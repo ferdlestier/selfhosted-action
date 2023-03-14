@@ -1,0 +1,41 @@
+name: Test Deployment
+
+ #Controls when the workflow will run
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  CHECK-FOR-NEW-COMMITS:
+    runs-on: [self-hosted, macOS]
+    timeout-minutes: 10
+    outputs:
+      commits: ${{ steps.check-new-commits.outputs.new_commits }}
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.REPO }}
+          ref: ${{ env.BRANCH }}
+          #fetch-depth: '0'
+          token: ${{ secrets.PACKAGE_TOKEN }}
+          
+      - name: Check for new updates
+        id: updates
+        run: |
+          sudo apt-get update
+          sudo apt-get upgrade -y
+          sudo apt-get install git -y
+          
+      - name: Check for new commits in last 15 mins
+        id: gitlog
+        run: |
+          git log --since="15.minutes" --pretty=format:'"%s","%an","%ar","%h"'
+
+      - name: Check for last commits
+        id: gitlog1
+        run: |
+          git log --oneline --reverse refs/heads/main | awk 'NR % 1 == 0'
